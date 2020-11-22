@@ -52,3 +52,6 @@ $ python main.py --mode=run --checkpoint train_16 --model_name default --image=.
 
 `num` is the random number of images from the set, default is `4`
 
+## Example
+<img src="./sample.png" width="576"/>
+
