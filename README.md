@@ -1,15 +1,17 @@
-# hair-dye
+# hair-seg
 
 The architecture was proposed by [Alex L. Cheng C, etc. 'Real-time deep hair matting on mobile devices'](https://arxiv.org/pdf/1712.07168.pdf). This repository is based on https://github.com/aobo-y/hair-dye.
 
-Tested with pytorch 1.0 (install it with conda install pytorch==1.0.0 torchvision==0.2.1 cuda100 -c pytorch)
+Tested with pytorch 1.0 
+```
+install it with conda install pytorch==1.0.0 torchvision==0.2.1 cuda100 -c pytorch)
+```
 
 ## Download dataset
 
-```
 Download dataset from https://github.com/switchablenorms/CelebAMask-HQ and split it in train/val/test folds using https://github.com/switchablenorms/CelebAMask-HQ/tree/master/face_parsing#preprocessing. You should get 23608 in train and 2931 in validation.
 --
-```
+
 **Data structure training**
 ```
 ├── data/dataset_celeba
