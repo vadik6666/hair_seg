@@ -19,12 +19,10 @@ Download dataset from https://github.com/switchablenorms/CelebAMask-HQ and split
 │   │   ├──images
 │   │   │   ├── 1.jpg
 │   │   │   ├── 2.jpg
-│   │   │   ├── 3.jpg
 ...
 │   │   ├──masks
 │   │   │   ├── 1.png
 │   │   │   ├── 2.png
-│   │   │   ├── 3.png
 ...
 │   ├── val
 ...
@@ -33,10 +31,11 @@ Download dataset from https://github.com/switchablenorms/CelebAMask-HQ and split
 ## Train
 
 ```
-$ CUDA_VISIBLE_DEVICES=0 python -u main.py --mode=train --model_name default --print_freq 5 --optimizer adam --lr 3e-4 --wup 2000 --ep 16 --lr_schedule cosine
+$ CUDA_VISIBLE_DEVICES=0 python -u main.py --mode=train --model_name default --print_freq 5 --optimizer adam --lr 1e-3 --wup 2000 --ep 16 --lr_schedule cosine
 ```
 
 The checkpoint and sample images are saved in `checkpoint/default/` by default.
+Trained model checkpoints, logs and tensorboards you can download [here](https://drive.google.com/drive/folders/1xg4m50SLbKgQWEXUpVUn1Af2HtsR7faU?usp=sharing). 
 Trained model gives around 0.89 IoU.
 
 ## Run
