@@ -10,7 +10,7 @@ install it with conda install pytorch==1.0.0 torchvision==0.2.1 cuda100 -c pytor
 ## Download dataset
 
 Download dataset from https://github.com/switchablenorms/CelebAMask-HQ and split it in train/val/test folds using https://github.com/switchablenorms/CelebAMask-HQ/tree/master/face_parsing#preprocessing. You should get 23608 in train and 2931 in validation.
---
+
 
 **Data structure training**
 ```
