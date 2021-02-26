@@ -33,6 +33,7 @@ $ CUDA_VISIBLE_DEVICES=0 python -u main.py --mode=train --model_name default --p
 
 The checkpoint and sample images are saved in `hair_seg/checkpoint/default/` by default.
 
+### trained models
 Checkpoints, logs and tensorboards you can download [here](https://drive.google.com/drive/folders/1xg4m50SLbKgQWEXUpVUn1Af2HtsR7faU?usp=sharing).
 
 Trained model gives around 0.89 IoU.
@@ -53,4 +54,3 @@ $ python main.py --mode=run --set=test --num=4 --checkpoint train_16 --model_nam
 `set` can be one `train` and `test`, default is `test`
 
 `num` is the random number of images from the set, default is `4`
-
