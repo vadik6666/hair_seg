@@ -103,7 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-data
-checkpoints
-tb
-logs
+hair_seg/data
+hair_seg/checkpoints
+hair_seg/tb
+hair_seg/logs
