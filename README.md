@@ -1,4 +1,5 @@
-# hair-seg
+# Hair segmentation
+<img src="./sample.png" width="576"/>
 
 The architecture was proposed by [Alex L. Cheng C, etc. 'Real-time deep hair matting on mobile devices'](https://arxiv.org/pdf/1712.07168.pdf). This repository is based on https://github.com/aobo-y/hair-dye.
 
@@ -7,7 +8,7 @@ Tested with pytorch 1.0
 install it with conda install pytorch==1.0.0 torchvision==0.2.1 cuda100 -c pytorch)
 ```
 
-## Download dataset
+## Data
 
 Download dataset from https://github.com/switchablenorms/CelebAMask-HQ and split it in train/val/test folds using https://github.com/switchablenorms/CelebAMask-HQ/tree/master/face_parsing#preprocessing. You should get 23608 in train and 2931 in validation.
 
@@ -50,7 +51,4 @@ $ python main.py --mode=run --checkpoint train_16 --model_name default --image=.
 `set` can be one `train` and `test`, default is `test`
 
 `num` is the random number of images from the set, default is `4`
-
-## Example
-<img src="./sample.png" width="576"/>
 
