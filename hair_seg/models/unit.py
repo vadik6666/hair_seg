@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-'''
+"""
 Encoding part unit
-'''
+"""
 
 
 class _GreenBlock(nn.Module):
@@ -98,9 +98,10 @@ class _EncodeBlock6Green(nn.Module):
         return output
 
 
-'''
+"""
 Decoding part unit
-'''
+"""
+
 
 class _SkipConnection(nn.Module):
     """ The skip connection. just a 1x1 convolution. """

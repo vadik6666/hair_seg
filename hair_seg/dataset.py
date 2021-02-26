@@ -2,13 +2,11 @@ import os
 import random
 
 import torch.utils.data
-import torchvision.transforms as transforms
 from PIL import Image
 
 import albumentations as A
 import albumentations.pytorch as AT
 import cv2
-
 
 
 class ImgTransformer:
@@ -119,4 +117,3 @@ class HairDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.image_names)
-

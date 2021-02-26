@@ -104,16 +104,13 @@ class Trainer:
             self.model.train()
             loss_sum, iou_sum = 0, 0
 
-            
-
             for idx, training_batch in enumerate(trainloader):
                 curent_iteration = (epoch - 1) * len(trainloader) + idx
 
                 if curent_iteration < args.wup:
                     self.adjust_warmup_lr(curent_iteration, args.wup, args.lr)
-            
 
-                lr = self.optimizer.param_groups[0]["lr"] 
+                lr = self.optimizer.param_groups[0]["lr"]
 
                 # run a training iteration with batch
                 loss, iou, pred = self.train_batch(training_batch)
@@ -175,7 +172,6 @@ class Trainer:
 
                 avg_loss = loss_sum / len(devloader)
                 avg_iou = iou_sum / len(devloader)
-
 
                 self.log("Validation; Epoch {}; Avg loss: {:.4f}; Avg IOU: {:.4f};".format(epoch, avg_loss, avg_iou))
                 writer.add_scalar("val/loss", avg_loss, epoch)

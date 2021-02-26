@@ -17,6 +17,7 @@ from utils import create_multi_figure
 USE_CUDA = torch.cuda.is_available()
 DEVICE = torch.device("cuda" if USE_CUDA else "cpu")
 
+
 def evalTest(test_data, model, args):
     testloader = DataLoader(test_data, batch_size=4, shuffle=False)
     hairmat_loss = HairMattingLoss(args.grad_lambda)
@@ -61,7 +62,6 @@ def evaluate(test_data, model, num, absolute=True):
     for i in range(num):
         idx = random.randint(0, len(test_data) - 1)
 
-       
         image, mask = (i.to(DEVICE).unsqueeze(0) for i in test_data[idx])
         pred = model(image)
 

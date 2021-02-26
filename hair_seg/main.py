@@ -111,9 +111,7 @@ def main():
     parser.add_argument("--lr", type=float, default=3e-4, help="learning rate")
     parser.add_argument("--optimizer", type=str, default="adam", help="optimizer (adam; sgd)")
     parser.add_argument("--wup", type=int, default=0, help="number of warm up epochs")
-    parser.add_argument(
-        "--lr_schedule", type=str, default="", help="learning rate schedule (multi_step_lr; cosine)"
-    )
+    parser.add_argument("--lr_schedule", type=str, default="", help="learning rate schedule (multi_step_lr; cosine)")
     parser.add_argument("--print_freq", type=int, default=100, help="print stats every x iterations")
     parser.add_argument("--grad_lambda", type=float, default=0.5, help="gradient loss lambda")
     args = parser.parse_args()
