@@ -1,5 +1,5 @@
 # Hair segmentation
-<img src="./sample.png" width="576"/>
+<img src="./example.png" width="576"/>
 
 The architecture was proposed by [Alex L. Cheng C, etc. 'Real-time deep hair matting on mobile devices'](https://arxiv.org/pdf/1712.07168.pdf). This repository is based on https://github.com/aobo-y/hair-dye.
 
