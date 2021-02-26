@@ -3,10 +3,6 @@
 
 The architecture was proposed by [Alex L. Cheng C, etc. 'Real-time deep hair matting on mobile devices'](https://arxiv.org/pdf/1712.07168.pdf). This repository is based on https://github.com/aobo-y/hair-dye.
 
-Tested with pytorch 1.0 
-```
-install it with conda install pytorch==1.0.0 torchvision==0.2.1 cuda100 -c pytorch)
-```
 
 ## Data
 
@@ -15,7 +11,7 @@ Download dataset from https://github.com/switchablenorms/CelebAMask-HQ and split
 
 **Data structure training**
 ```
-├── data/dataset_celeba
+├── hair_seg/data/dataset_celeba
 │   ├── train
 │   │   ├──images
 │   │   │   ├── 1.jpg
@@ -36,16 +32,21 @@ $ CUDA_VISIBLE_DEVICES=0 python -u main.py --mode=train --model_name default --p
 ```
 
 The checkpoint and sample images are saved in `checkpoint/default/` by default.
-Trained model checkpoints, logs and tensorboards you can download [here](https://drive.google.com/drive/folders/1xg4m50SLbKgQWEXUpVUn1Af2HtsR7faU?usp=sharing). 
+Trained model checkpoints, logs and tensorboards you can download [here](https://drive.google.com/drive/folders/1xg4m50SLbKgQWEXUpVUn1Af2HtsR7faU?usp=sharing).
+
 Trained model gives around 0.89 IoU.
 
-## Run
+## Inference
 
-Plot a groundtruth image, the predicted segmentation and the hue adjusted result from the datasets or any specified image
+Plot a groundtruth image, the predicted segmentation and the hue adjusted result.
+With specified image:
+```
+$ python main.py --mode=run --checkpoint train_16 --model_name default --image=./path/to/the/image.png
+```
 
+With train or test datasets images:
 ```
 $ python main.py --mode=run --set=test --num=4 --checkpoint train_16 --model_name default
-$ python main.py --mode=run --checkpoint train_16 --model_name default --image=./path/to/the/image.png
 ```
 
 `set` can be one `train` and `test`, default is `test`

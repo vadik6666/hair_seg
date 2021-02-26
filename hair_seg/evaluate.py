@@ -20,6 +20,7 @@ DEVICE = torch.device("cuda" if USE_CUDA else "cpu")
 
 # hairmat_loss = HairMattingLoss(config.GRAD_LOSS_LAMBDA)
 
+
 def evalTest(test_data, model, args):
     testloader = DataLoader(test_data, batch_size=4, shuffle=False)
     hairmat_loss = HairMattingLoss(args.grad_lambda)
@@ -37,26 +38,27 @@ def evalTest(test_data, model, args):
         floss = F1_loss(pred, mask).item()
         total_f1 += floss
 
-    print('Testing Loss: ', total_loss / len(testloader) )
-    print('Testing IOU: ', total_iou / len(testloader)  )
-    print('Testing Acc: ', total_acc / len(testloader)  )
-    print('Testing F1: ', total_f1 / len(testloader)  )
+    print("Testing Loss: ", total_loss / len(testloader))
+    print("Testing IOU: ", total_iou / len(testloader))
+    print("Testing Acc: ", total_acc / len(testloader))
+    print("Testing F1: ", total_f1 / len(testloader))
+
 
 def evaluateOne(img, model, absolute=True):
     img = img.to(DEVICE).unsqueeze(0)
     pred = model(img)
 
     if absolute:
-        pred[pred > .5] = 1.
-        pred[pred <= .5] = 0.
+        pred[pred > 0.5] = 1.0
+        pred[pred <= 0.5] = 0.0
     else:
-        pred[pred < .4] = 0
+        pred[pred < 0.4] = 0
         # pred[pred < .90] = 0
 
     rows = [[img[0], pred[0]]]
     create_multi_figure(rows, dye=True)
     # plt.show()
-    plt.savefig('result.jpg')
+    plt.savefig("result.jpg")
 
 
 def evaluate(test_data, model, num, absolute=True):
@@ -64,24 +66,23 @@ def evaluate(test_data, model, num, absolute=True):
     for i in range(num):
         idx = random.randint(0, len(test_data) - 1)
 
-    # for i, idx in enumerate([
-    #     203, 159, 153, 154
-    # ]):
+        # for i, idx in enumerate([
+        #     203, 159, 153, 154
+        # ]):
         image, mask = (i.to(DEVICE).unsqueeze(0) for i in test_data[idx])
         pred = model(image)
 
         # loss = hairmat_loss(pred, mask, image)
         # print(idx, 'loss:', loss.item())
 
-
         if absolute:
-            pred[pred > .5] = 1.
-            pred[pred <= .5] = 0.
+            pred[pred > 0.5] = 1.0
+            pred[pred <= 0.5] = 0.0
         else:
-            pred[pred < .4] = 0
+            pred[pred < 0.4] = 0
 
-        rows[i] = [image[0], mask[0], pred[0]] # get batch
+        rows[i] = [image[0], mask[0], pred[0]]  # get batch
 
     create_multi_figure(rows, dye=True)
     # plt.show()
-    plt.savefig('result.jpg')
+    plt.savefig("result.jpg")
