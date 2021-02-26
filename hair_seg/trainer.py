@@ -8,13 +8,10 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 from torch import optim
+from torch.utils.tensorboard import SummaryWriter
 
-# import config
 from utils import create_figure
-
 from loss import iou_loss, HairMattingLoss
-
-from tensorboardX import SummaryWriter
 
 USE_CUDA = torch.cuda.is_available()
 DEVICE = torch.device("cuda" if USE_CUDA else "cpu")
@@ -62,9 +59,7 @@ class Trainer:
     def train_batch(self, training_batch, tf_rate=1, val=False):
         # extract fields from batch & set DEVICE options
         image, mask = (i.to(DEVICE) for i in training_batch)
-        # print('img, mask:', image.size(), mask.size(), type(mask))
         pred = self.model(image)
-        # print('  pred:',pred.size(), type(pred))
         loss = self.loss(pred, mask, image)
 
         # if in training, not validate
@@ -80,7 +75,6 @@ class Trainer:
 
         return loss.item(), iou.item(), pred
 
-    # def train(self, train_data, n_epochs, batch_size=1, stage=None, dev_data=None):
     def train(self, args, train_data, dev_data=None):
         n_epochs = args.ep
         batch_size = args.bs
@@ -96,11 +90,6 @@ class Trainer:
         if args.lr_schedule == "multi_step_lr":
             print("Multi Step LR scheduler")
             scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, milestones=[10, 14], gamma=0.1)
-        elif args.lr_schedule == "plateau":
-            print("Reduce On Plateau LR scheduler")
-            scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-                self.optimizer, mode="min", factor=0.1, patience=3, verbose=True, threshold=5e-3, min_lr=1e-6
-            )
         elif args.lr_schedule == "cosine":
             print("Cosine LR scheduler")
             scheduler = optim.lr_scheduler.CosineAnnealingLR(
@@ -115,21 +104,16 @@ class Trainer:
             self.model.train()
             loss_sum, iou_sum = 0, 0
 
-            if args.lr_schedule == "multi_step_lr":
-                # adjust learning rate
-                if curent_iteration >= args.wup:
-                    scheduler.step()
+            
 
             for idx, training_batch in enumerate(trainloader):
                 curent_iteration = (epoch - 1) * len(trainloader) + idx
 
                 if curent_iteration < args.wup:
                     self.adjust_warmup_lr(curent_iteration, args.wup, args.lr)
-                elif args.lr_schedule == "cosine":
-                    # adjust learning rate
-                    scheduler.step()
+            
 
-                lr = self.optimizer.param_groups[0]["lr"]  # scheduler.get_lr()[0]
+                lr = self.optimizer.param_groups[0]["lr"] 
 
                 # run a training iteration with batch
                 loss, iou, pred = self.train_batch(training_batch)
@@ -145,7 +129,8 @@ class Trainer:
                     avg_iou = iou_sum / iteration
 
                     self.log(
-                        "Epoch {}; Iter: {}({}); LR: {:0.4g}; Percent: {:.1f}%; Avg loss: {:.4f}; Avg IOU: {:.4f};".format(
+                        "Epoch {}; Iter: {}({}); LR: {:0.4g}; Percent: {:.1f}%; \
+                        Avg loss: {:.4f}; Avg IOU: {:.4f};".format(
                             epoch,
                             iteration,
                             curent_iteration + 1,
@@ -160,8 +145,15 @@ class Trainer:
                     writer.add_scalar("train/iou", avg_iou, curent_iteration)
                     writer.add_scalar("train/lr", lr, curent_iteration)
 
-                    # pred = pred[0]
-                    # self.save_sample_imgs(training_batch[0][0], training_batch[1][0], pred, epoch, iteration)
+                if args.lr_schedule == "cosine":
+                    # adjust learning rate
+                    if curent_iteration >= args.wup:
+                        scheduler.step()
+
+            if args.lr_schedule == "multi_step_lr":
+                # adjust learning rate
+                if curent_iteration >= args.wup:
+                    scheduler.step()
 
             self.trained_epoch = epoch
             self.train_loss["loss"].append(loss_sum / len(trainloader))
@@ -181,17 +173,9 @@ class Trainer:
                     loss_sum += loss
                     iou_sum += iou
 
-                    # if i == 0:
-                    #     pred = pred[0]
-                    #     self.save_sample_imgs(dev_batch[0][0], dev_batch[1][0], pred, epoch, 'val')
-
                 avg_loss = loss_sum / len(devloader)
                 avg_iou = iou_sum / len(devloader)
 
-                if args.lr_schedule == "plateau":
-                    # adjust learning rate
-                    if curent_iteration >= args.wup:
-                        scheduler.step(avg_loss)
 
                 self.log("Validation; Epoch {}; Avg loss: {:.4f}; Avg IOU: {:.4f};".format(epoch, avg_loss, avg_iou))
                 writer.add_scalar("val/loss", avg_loss, epoch)
@@ -220,11 +204,10 @@ class Trainer:
         writer.close()
 
     def save_sample_imgs(self, img, mask, prediction, epoch, iter):
-        # print(img.size(), mask.size())
         fig = create_figure(img, mask, prediction.float())
 
         self.checkpoint_mng.save_image(f"{epoch}-{iter}", fig)
-        plt.savefig("resultAAA.jpg")
+        plt.savefig("result_deb.jpg")
         plt.close(fig)
 
     def adjust_warmup_lr(self, iteration, warmup_iterations, lr):
@@ -233,7 +216,6 @@ class Trainer:
             return
 
         factor = (iteration + 1) / warmup_iterations
-        # print(factor * lr, self.optimizer.param_groups[0]['lr'])
 
         for param_group in self.optimizer.param_groups:
             param_group["lr"] = factor * lr

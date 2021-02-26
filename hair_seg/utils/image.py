@@ -19,8 +19,6 @@ def create_multi_figure(rows, dye=False):
     for i, data in enumerate(rows):
         img = data[0].cpu()
         prediction = data[-1].cpu()
-        # print(img)
-        # print(prediction)
 
         # reverse normalization of the oriignal image
         img = (img + 1) / 2

@@ -1,12 +1,7 @@
-"""
-SouthPark Chatbot
-"""
-
 import os
 import argparse
 import torch
 
-# import config
 from models import MobileHairNet
 from trainer import Trainer
 from evaluate import evalTest, evaluate, evaluateOne
@@ -55,7 +50,6 @@ def train(args, model, checkpoint, checkpoint_mng):
     # Ensure dropout layers are in train mode
     model.train()
 
-    # trainer.train(train_datasets, n_epochs=args.ep, batch_size=args.bs, stage=args.mode, dev_data=dev_datasets)
     trainer.train(args, train_datasets, dev_data=dev_datasets)
 
 
@@ -118,7 +112,7 @@ def main():
     parser.add_argument("--optimizer", type=str, default="adam", help="optimizer (adam; sgd)")
     parser.add_argument("--wup", type=int, default=0, help="number of warm up epochs")
     parser.add_argument(
-        "--lr_schedule", type=str, default="", help="learning rate schedule (multi_step_lr; plateau; cosine)"
+        "--lr_schedule", type=str, default="", help="learning rate schedule (multi_step_lr; cosine)"
     )
     parser.add_argument("--print_freq", type=int, default=100, help="print stats every x iterations")
     parser.add_argument("--grad_lambda", type=float, default=0.5, help="gradient loss lambda")
@@ -144,23 +138,7 @@ def main():
         test(args, model, checkpoint)
 
     elif args.mode == "run":
-        # run(model, checkpoint, dset=args.set, num=args.num, img_path=args.image)
         run(args, model, checkpoint)
-
-
-# def init():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('-cp', '--checkpoint')
-#     args = parser.parse_args()
-
-#     checkpoint_mng = CheckpointManager(SAVE_PATH)
-#     checkpoint = None if not args.checkpoint else checkpoint_mng.load(args.checkpoint, device)
-
-#     model = build_model(checkpoint)
-#     # Set dropout layers to eval mode
-#     model.eval()
-
-#     return model
 
 
 if __name__ == "__main__":

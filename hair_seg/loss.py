@@ -2,8 +2,6 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-# import config
-
 USE_CUDA = torch.cuda.is_available()
 DEVICE = torch.device("cuda" if USE_CUDA else "cpu")
 
@@ -26,10 +24,6 @@ class HairMattingLoss(nn.Module):
             self.rgb_ratios = nn.Parameter(rgb_ratios, False)
 
     def forward(self, pred, mask, img):
-        # print(pred.shape, mask.shape, img.shape, type(pred), type(mask), type(img))
-        # print('pred=', pred.max())
-        # print('mask=', mask.max())
-        # print('img=', img.max())
         loss = self.bce_loss(pred, mask)
 
         if self.ratio_of_gradient > 0:
@@ -84,8 +78,8 @@ def F1_loss(pred, mask):
     pred[pred <= 0.5] = 0
     pred = pred.squeeze().long()
     mask = mask.squeeze().long()
-    all_ones = torch.ones_like(mask)
-    all_zeros = torch.zeros_like(mask)
+    # all_ones = torch.ones_like(mask)
+    # all_zeros = torch.zeros_like(mask)
     # Right = torch.where(pred == mask, all_ones, all_zeros)
     Overlep = torch.mul(pred, mask)
     precision = torch.div(torch.sum(Overlep).float(), torch.sum(pred).float())
